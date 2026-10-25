@@ -1,0 +1,32 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kgnotes"
+version = "0.1.0"
+description = "Personal knowledge-graph notes agent: extract entities/relations, build a Neo4j graph and vector index, answer follow-up questions."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+authors = [{ name = "kgnotes contributors" }]
+dependencies = [
+  "fastapi>=0.110",
+  "uvicorn>=0.27",
+  "httpx>=0.26",
+  "PyYAML>=6.0",
+]
+
+[project.optional-dependencies]
+neo4j = ["neo4j>=5.20"]
+dev = ["pytest>=8.0", "neo4j>=5.20"]
+
+[project.scripts]
+kgnotes = "kgnotes.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-q"
