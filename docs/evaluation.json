@@ -1,0 +1,262 @@
+{
+  "data_dir": "/tmp/kgnotes-eval-81xmw7an",
+  "mode": "offline/heuristic+hash",
+  "corpus": {
+    "notes": 5,
+    "chunks": 16,
+    "entities": 52,
+    "relations": 92,
+    "vectors": 16,
+    "note_files": [
+      "GraphRAG 读书笔记",
+      "知识图谱助手项目",
+      "Neo4j 与向量索引",
+      "Python asyncio notes",
+      "团队周会纪要 2026-10-20"
+    ],
+    "ingest_ms": 330.3
+  },
+  "extraction_curated": {
+    "tp": 22,
+    "predicted": 22,
+    "gold": 22,
+    "precision": 1.0,
+    "recall": 1.0,
+    "f1": 1.0,
+    "unmatched_predicted": [],
+    "missed_gold": []
+  },
+  "entity_types": {
+    "correct": 9,
+    "total": 9,
+    "accuracy": 1.0,
+    "details": [
+      {
+        "name": "Neo4j",
+        "expected": "TECHNOLOGY",
+        "actual": "TECHNOLOGY",
+        "ok": true
+      },
+      {
+        "name": "王小明",
+        "expected": "PERSON",
+        "actual": "PERSON",
+        "ok": true
+      },
+      {
+        "name": "示例科技公司",
+        "expected": "ORGANIZATION",
+        "actual": "ORGANIZATION",
+        "ok": true
+      },
+      {
+        "name": "GraphRAG",
+        "expected": "CONCEPT",
+        "actual": "CONCEPT",
+        "ok": true
+      },
+      {
+        "name": "图数据库",
+        "expected": "TECHNOLOGY",
+        "actual": "TECHNOLOGY",
+        "ok": true
+      },
+      {
+        "name": "李雷",
+        "expected": "PERSON",
+        "actual": "PERSON",
+        "ok": true
+      },
+      {
+        "name": "韩梅梅",
+        "expected": "PERSON",
+        "actual": "PERSON",
+        "ok": true
+      },
+      {
+        "name": "Cypher",
+        "expected": "TECHNOLOGY",
+        "actual": "TECHNOLOGY",
+        "ok": true
+      },
+      {
+        "name": "向量检索模块",
+        "expected": "CONCEPT",
+        "actual": "CONCEPT",
+        "ok": true
+      }
+    ]
+  },
+  "followup": {
+    "first_question": "王小明是谁？",
+    "followup_question": "他在哪工作？",
+    "rewritten_question": "王小明是谁？ 他在哪工作？",
+    "answer_excerpt": "根据你的笔记，与「王小明」相关的内容如下：\n\n**图谱关系**\n- 王小明 —AUTHORED→ 知识图谱助手项目（知识图谱助手项目的作者是王小明。）\n- 王小明 —LEADS→ 知识图谱助手项目（王小明是知识图谱助手项目的负责人。）\n- 王小明 —WORKS_AT→ 示例科技公司（王小明就职于示例科技公司。）\n- 王小明 —OWNS→ 整理评测集（王小明负责整理评测集。）\n\n**相关原文**\n-",
+    "passed": true,
+    "latency_ms": 9.7
+  },
+  "extraction_heldout": {
+    "tp": 1,
+    "predicted": 1,
+    "gold": 6,
+    "precision": 1.0,
+    "recall": 0.1667,
+    "f1": 0.2857,
+    "unmatched_predicted": [],
+    "missed_gold": [
+      "星图 | IS_A | 知识库产品",
+      "星图 | USES | fastapi",
+      "星图 | USES | neo4j",
+      "陈晨 | WORKS_AS | 知识图谱工程师",
+      "陈晨 | WORKS_AT | 星河数据"
+    ]
+  },
+  "heldout_note": "# 读书会随记\n\n我在上周的读书会上认识了陈晨，她现在在星河数据做知识图谱工程师。\n星河数据总部位于杭州。\n星河数据正在做一个叫「星图」的内部知识库产品。\n星图的技术栈是 Neo4j 和 FastAPI。",
+  "qa": {
+    "passed": 13,
+    "total": 13,
+    "accuracy": 1.0,
+    "rows": [
+      {
+        "question": "知识图谱助手项目使用了哪些技术？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 13.0,
+        "latency_ms_min": 12.2,
+        "latency_ms_max": 13.7
+      },
+      {
+        "question": "知识图谱助手项目的作者是谁？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 13.1,
+        "latency_ms_min": 11.8,
+        "latency_ms_max": 14.3
+      },
+      {
+        "question": "王小明在哪里工作？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 12.6,
+        "latency_ms_min": 11.3,
+        "latency_ms_max": 13.3
+      },
+      {
+        "question": "Neo4j 是什么？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 12.8,
+        "latency_ms_min": 11.5,
+        "latency_ms_max": 13.9
+      },
+      {
+        "question": "Neo4j 使用什么查询语言？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 11.7,
+        "latency_ms_min": 10.5,
+        "latency_ms_max": 12.4
+      },
+      {
+        "question": "GraphRAG 是什么？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 12.9,
+        "latency_ms_min": 12.5,
+        "latency_ms_max": 13.5
+      },
+      {
+        "question": "团队周会中谁负责向量检索模块？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 12.3,
+        "latency_ms_min": 11.3,
+        "latency_ms_max": 13.0
+      },
+      {
+        "question": "谁负责前端可视化？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 13.3,
+        "latency_ms_min": 12.4,
+        "latency_ms_max": 13.9
+      },
+      {
+        "question": "下次周会定在什么时候？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 12.3,
+        "latency_ms_min": 10.2,
+        "latency_ms_max": 13.4
+      },
+      {
+        "question": "知识图谱助手项目包含哪些模块？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 14.7,
+        "latency_ms_min": 11.3,
+        "latency_ms_max": 17.0
+      },
+      {
+        "question": "Neo4j 支持向量索引吗？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 13.2,
+        "latency_ms_min": 12.6,
+        "latency_ms_max": 13.7
+      },
+      {
+        "question": "Python asyncio 有哪些注意事项？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 11.4,
+        "latency_ms_min": 10.8,
+        "latency_ms_max": 12.2
+      },
+      {
+        "question": "知识图谱助手项目和 GraphRAG 的关注点有什么不同？",
+        "passed": true,
+        "missing_keywords": [],
+        "mode": "extractive",
+        "citations": 6,
+        "latency_ms_avg": 13.2,
+        "latency_ms_min": 11.8,
+        "latency_ms_max": 15.4
+      }
+    ]
+  },
+  "latency": {
+    "ask_runs": 39,
+    "ask_avg_ms": 12.8,
+    "ask_p50_ms": 12.6,
+    "ask_p95_ms": 15.4,
+    "ask_max_ms": 17.0,
+    "search_runs": 15,
+    "search_avg_ms": 3.1,
+    "search_p95_ms": 3.5
+  }
+}

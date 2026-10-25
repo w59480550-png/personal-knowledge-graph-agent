@@ -11,7 +11,7 @@ from typing import Iterable, Sequence
 
 _CJK = r"\u3400-\u4dbf\u4e00-\u9fff\uf900-\ufaff"
 _WORD_RE = re.compile(rf"[A-Za-z][A-Za-z0-9_+#.-]*|\d+(?:\.\d+)?|[{_CJK}]")
-_SENTENCE_SPLIT_RE = re.compile(r"(?<=[。！？!?；;])|\n{2,}")
+_SENTENCE_SPLIT_RE = re.compile(r"(?<=[。！？!?；;])|(?<=[.!?])\s+|\n{2,}")
 _SPACE_RE = re.compile(r"[ \t\u3000]+")
 _PUNCT_RE = re.compile(rf"[^\w{_CJK}#._-]+", re.UNICODE)
 

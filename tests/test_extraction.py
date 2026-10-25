@@ -50,6 +50,29 @@ def test_heuristic_is_deterministic_and_bounded():
     ]
 
 
+def test_heuristic_relations_english_and_roles():
+    note, chunks = _chunks(
+        "FastAPI is built with asyncio. 李雷负责向量检索模块。"
+        "王小明是知识图谱助手项目的负责人。"
+    )
+    extraction = HeuristicExtractor().extract(note, chunks[0])
+    triples = {(rel.source, rel.type, rel.target) for rel in extraction.relations}
+    assert ("FastAPI", "USES", "asyncio") in triples
+    assert ("李雷", "OWNS", "向量检索模块") in triples
+    assert ("王小明", "LEADS", "知识图谱助手项目") in triples
+
+
+def test_heading_prefix_does_not_block_first_sentence():
+    loader = NoteLoader()
+    note = loader.from_text(
+        "## 模块\n\n知识图谱助手项目包含向量检索模块。", title="标题", path="heading.md"
+    )
+    chunks = loader.chunk(note)
+    extraction = HeuristicExtractor().extract(note, chunks[0])
+    triples = {(rel.source, rel.type, rel.target) for rel in extraction.relations}
+    assert ("向量检索模块", "PART_OF", "知识图谱助手项目") in triples
+
+
 def test_entity_type_inference():
     assert infer_entity_type("Neo4j", "图数据库") == "TECHNOLOGY"
     assert infer_entity_type("示例科技公司") == "ORGANIZATION"

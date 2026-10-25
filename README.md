@@ -312,6 +312,21 @@ curl -s localhost:8000/stats
 
 ---
 
+## Demo 评测
+
+```bash
+python scripts/evaluate_demo.py --markdown docs/evaluation.md --json docs/evaluation.json
+```
+
+自动输出：语料规模、关系抽取 P/R/F1（规则友好示例集 + 改写留出集）、
+关键实体类型准确率、13 个问答 + 1 个多轮追问的通过率、问答/检索延迟。
+最近一次结果见 [`docs/evaluation.md`](docs/evaluation.md)。
+
+> 100% 的关键词命中仅代表规则友好的 demo 小样本；留出改写集上规则抽取召回为 16.7%，
+> 生产语料建议开启 LLM 抽取。
+
+---
+
 ## 测试
 
 ```bash
@@ -352,7 +367,10 @@ src/kgnotes/
   retrieval.py        # 混合检索与 RRF
   sessions.py         # 多轮会话存储
   qa.py               # 追问改写、上下文、回答、引用
-tests/                # pytest（45 个用例；Neo4j 集成用例默认跳过）
+tests/                # pytest（47 个用例；Neo4j 集成用例默认跳过）
+scripts/
+  evaluate_demo.py    # 可复现的 demo 评测（抽取 + 问答 + 延迟）
+docs/evaluation.md    # 最近一次评测结果
 notes/                # 示例笔记
 docker-compose.yml    # Neo4j 5
 ```

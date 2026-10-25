@@ -35,6 +35,22 @@ _TECH_EN = ("api", "sdk", "js", "py", "db", "framework", "engine", "library", "p
 
 _PRONOUN_PREFIXES = ("它", "他", "她", "这", "那", "该", "其", "此", "these", "this", "that", "it", "they")
 
+# Common Chinese surnames used as a lightweight person-name heuristic.
+_SURNAMES = set(
+    "王李张刘陈杨黄赵吴周徐孙马朱胡郭何高林罗郑梁谢宋唐许韩冯邓曹彭曾肖田董袁潘于蒋蔡余杜叶程苏魏吕"
+    "丁任沈姚卢姜崔钟谭陆汪范金石廖贾夏韦付方白邹孟熊秦邱江尹薛闫段雷侯龙史陶黎贺顾毛郝龚邵万钱严覃武戴莫孔向汤"
+)
+_COMMON_NON_NAMES = {"北京", "上海", "广州", "深圳", "中国", "美国", "项目", "团队", "公司", "系统", "模块"}
+
+
+def _looks_like_person(name: str) -> bool:
+    if not (2 <= len(name) <= 3) or name in _COMMON_NON_NAMES:
+        return False
+    if not all("\u4e00" <= ch <= "\u9fff" for ch in name):
+        return False
+    return name[0] in _SURNAMES
+
+
 # (relation, regex, source_group, target_group, confidence)
 _ZH_PATTERNS: list[tuple[str, re.Pattern[str], int, int, float]] = [
     ("IS_A", re.compile(r"^([^，。；：:]{2,24}?)(?:是一种|是一个|属于)([^，。；：:]{2,24})$"), 1, 2, 0.72),
@@ -45,6 +61,8 @@ _ZH_PATTERNS: list[tuple[str, re.Pattern[str], int, int, float]] = [
     ("FOUNDED", re.compile(r"^([^，。；：:]{2,24}?)由([^，。；：:]{2,24}?)(?:创立|创建|创办|开发|设计)$"), 2, 1, 0.72),
     ("AUTHORED", re.compile(r"^([^，。；：:]{2,24}?)(?:的)?(?:作者|创始人)(?:是|为|：|:)([^，。；：:]{2,24})$"), 2, 1, 0.72),
     ("SUPPORTS", re.compile(r"^([^，。；：:]{2,24}?)支持([^，。；：:]{2,24})$"), 1, 2, 0.66),
+    ("OWNS", re.compile(r"^([^，。；：:]{2,24}?)负责([^，。；：:]{2,24})$"), 1, 2, 0.66),
+    ("LEADS", re.compile(r"^([^，。；：:]{2,24}?)是([^，。；：:]{2,24}?)的(?:负责人|项目经理|主管|组长)$"), 1, 2, 0.72),
     ("COLLABORATES_WITH", re.compile(r"^([^，。；：:]{2,24}?)(?:与|和)([^，。；：:]{2,24}?)合作$"), 1, 2, 0.66),
 ]
 
@@ -72,6 +90,8 @@ def infer_entity_type(name: str, context: str = "") -> str:
         return "PROJECT"
     if any(hint in lowered for hint in _TECH_EN) or any(hint in haystack for hint in _TECH_HINTS):
         return "TECHNOLOGY"
+    if _looks_like_person(name):
+        return "PERSON"
     if any(hint in name for hint in _LOCATION_HINTS):
         return "LOCATION"
     if any(hint in haystack for hint in _PERSON_HINTS):
@@ -87,7 +107,7 @@ def _clean_operand(text: str) -> str:
     value = re.sub(r"^(?:并且|而且|但是|因此|所以|同时|另外|此外|例如|比如|其中)\s*", "", value)
     value = re.sub(r"^(?:the|a|an)\s+", "", value, flags=re.I)
     value = re.sub(r"(?:的|了|着|过)$", "", value).strip()
-    return re.sub(r"\s{2,}", " ", value)
+    return re.sub(r"\s{2,}", " ", value).rstrip(".").strip()
 
 
 def _valid_operand(value: str) -> bool:
@@ -140,6 +160,8 @@ class HeuristicExtractor:
     def extract(self, note: Note, chunk: Chunk) -> Extraction:
         extraction = Extraction(extractor=self.name)
         text = chunk.text
+        if chunk.heading and text.startswith(chunk.heading):
+            text = text[len(chunk.heading):].lstrip("\n")
         self._collect_markup_entities(text, note, extraction)
         self._collect_aliases(text, note, extraction)
 
