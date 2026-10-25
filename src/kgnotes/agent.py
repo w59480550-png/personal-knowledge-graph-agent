@@ -15,12 +15,12 @@ from .extraction.pipeline import ExtractorPipeline
 from .graph.neo4j_store import Neo4jGraphStore
 from .graph.sqlite_store import SQLiteGraphStore
 from .llm import LLMClient
-from .models import Entity, Extraction, Relation
+from .models import Extraction, Relation
 from .notes import Chunk, Note, NoteLoader
 from .qa import QAService
 from .retrieval import HybridRetriever, RetrievalResult
 from .sessions import SessionStore
-from .text import normalize_name, truncate
+from .text import normalize_name
 from .vector import build_vector_index
 
 log = logging.getLogger(__name__)
@@ -98,9 +98,14 @@ class KnowledgeAgent:
     # -- ingest -------------------------------------------------------------
     def ingest_note(self, note: Note) -> IngestSummary:
         started = time.perf_counter()
+        previous_chunks = [
+            chunk.id for chunk, _ in self.store.iter_chunks() if chunk.note_id == note.id
+        ]
         chunks = self.loader.chunk(note)
         extraction = self.extractors.extract_note(note, chunks)
         created = self.store.upsert_note(note, chunks)
+        if previous_chunks:
+            self.vector_index.delete(previous_chunks)
         warnings: list[str] = []
 
         key_to_id: dict[str, str] = {}

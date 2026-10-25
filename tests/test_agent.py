@@ -38,6 +38,17 @@ def test_ingest_builds_graph_and_vectors(agent: KnowledgeAgent):
     assert updated.new_note is False
 
 
+def test_reingest_replaces_stale_chunks_and_vectors(agent: KnowledgeAgent):
+    long_text = "。".join(f"第{i}段内容介绍 Neo4j 图数据库" for i in range(40)) + "。"
+    first = agent.ingest_text(long_text, title="会缩短的笔记", path="resize.md")
+    assert first.chunks > 2
+    second = agent.ingest_text("Neo4j 是一个图数据库。", title="会缩短的笔记", path="resize.md")
+    assert second.new_note is False
+    stats = agent.stats()
+    assert stats["graph"]["chunks"] == second.chunks
+    assert stats["vectors"]["count"] == second.chunks
+
+
 def test_search_returns_hybrid_citations(agent: KnowledgeAgent):
     _seed(agent)
     result = agent.search("王小明在哪里工作？")

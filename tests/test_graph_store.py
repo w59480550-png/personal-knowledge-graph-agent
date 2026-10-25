@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from kgnotes.graph.sqlite_store import SQLiteGraphStore
 from kgnotes.models import Entity, Relation
-from kgnotes.notes import Note, NoteLoader
+from kgnotes.notes import NoteLoader
 
 
 def _note_and_chunks(tmp_path, title="测试笔记", content="Neo4j 是一个图数据库。", filename="a.md"):

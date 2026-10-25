@@ -8,7 +8,7 @@ import time
 
 from .config import Settings
 from .llm import LLMClient, LLMError
-from .models import Answer, Citation, Entity, Relation
+from .models import Answer, Citation
 from .retrieval import HybridRetriever, RetrievalResult
 from .sessions import SessionStore
 from .text import truncate

@@ -106,6 +106,7 @@ python -m kgnotes ingest notes/ --reset
 ```
 
 Neo4j Browser：<http://localhost:7474>（用户名 `neo4j`，密码 `kgnotes-pass`）。
+需要 Neo4j 5.13+（原生向量索引），`docker-compose.yml` 使用 5.26。
 
 图模型：
 
@@ -351,7 +352,7 @@ src/kgnotes/
   retrieval.py        # 混合检索与 RRF
   sessions.py         # 多轮会话存储
   qa.py               # 追问改写、上下文、回答、引用
-tests/                # pytest（44 个用例；Neo4j 集成用例默认跳过）
+tests/                # pytest（45 个用例；Neo4j 集成用例默认跳过）
 notes/                # 示例笔记
 docker-compose.yml    # Neo4j 5
 ```

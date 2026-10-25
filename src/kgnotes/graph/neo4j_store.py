@@ -100,17 +100,15 @@ class Neo4jGraphStore:
                 note_id=note.id,
                 chunks=[c.as_dict() for c in chunks],
             )
+        return not existing
 
     def delete_note(self, note_id: str) -> bool:
         existed = bool(self._run("MATCH (n:Note {id:$id}) RETURN n.id AS id", id=note_id))
         self._write(
-            """
-            MATCH (n:Note {id:$id})
-            OPTIONAL MATCH (n)-[:HAS_CHUNK]->(c:Chunk)
-            DETACH DELETE c, n
-            """,
+            "MATCH (n:Note {id:$id})-[:HAS_CHUNK]->(c:Chunk) DETACH DELETE c",
             id=note_id,
         )
+        self._write("MATCH (n:Note {id:$id}) DETACH DELETE n", id=note_id)
         self._write("MATCH (r:Relation {note_id:$id}) DETACH DELETE r", id=note_id)
         return existed
 
@@ -343,9 +341,6 @@ class Neo4jGraphStore:
                 break
         root = self.get_entity(entity_id=entity_id)
         return ([root] if root else []) + list(entities.values()), list(relations.values())
-
-        return not existing
-
 
     def stats(self) -> GraphStats:
         rows = self._run(
